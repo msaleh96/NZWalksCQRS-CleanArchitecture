@@ -43,9 +43,6 @@ public class WalksController(IMediator mediator) : ControllerBase
     {        
         var command = new UpdateWalkCommand(id, request.Name, request.Description, request.LengthInKm, request.DifficultyId, request.RegionId, request.imageUrl); 
 
-        if (id != command.Id)
-            return BadRequest("Id in URL and request body must match");
-
         await mediator.Send(command);
         return NoContent();
     }

@@ -43,9 +43,6 @@ public class RegionsController(IMediator mediator) : ControllerBase
     {        
         var command = new UpdateRegionCommand(id, request.Code, request.Name, request.imageUrl); 
 
-        if (id != command.Id)
-            return BadRequest("Id in URL and request body must match");
-
         await mediator.Send(command);
         return NoContent();
     }

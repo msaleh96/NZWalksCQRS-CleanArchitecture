@@ -43,9 +43,6 @@ public class DifficultiesController(IMediator mediator) : ControllerBase
     {        
         var command = new UpdateDifficultyCommand(id, request.Name); 
 
-        if (id != command.Id)
-            return BadRequest("Id in URL and request body must match");
-
         await mediator.Send(command);
         return NoContent();
     }
