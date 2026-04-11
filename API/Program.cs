@@ -3,6 +3,7 @@ using Application.Behaviors;
 using Application.Common.Interfaces;
 using FluentValidation;
 using Infrastructure.Data;
+using Infrastructure.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,8 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data S
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddScoped<IAppDbContext, AppDbContext>();
+
+builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
 var app = builder.Build();
 

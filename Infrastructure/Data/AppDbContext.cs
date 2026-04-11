@@ -1,5 +1,6 @@
 using Application.Common.Interfaces;
 using Domain.Difficulties;
+using Domain.Image;
 using Domain.Regions;
 using Domain.Walks;
 using Infrastructure.Configurations;
@@ -13,13 +14,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Walk> Walks => Set<Walk>();
     public DbSet<Difficulty> Difficulties => Set<Difficulty>();
     public DbSet<Region> Regions => Set<Region>();
-
-
+    public DbSet<Image> Images => Set<Image>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ImageConfiguration).Assembly);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(WalkConfiguration).Assembly);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DifficultyConfiguration).Assembly);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(RegionConfiguration).Assembly);

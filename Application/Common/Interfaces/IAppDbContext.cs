@@ -1,4 +1,5 @@
 using Domain.Difficulties;
+using Domain.Image;
 using Domain.Regions;
 using Domain.Walks;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ public interface IAppDbContext
     DbSet<Region> Regions { get; }
     
     DbSet<Walk> Walks { get; }
+
+    DbSet<Image> Images { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -28,6 +28,26 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FileName = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    FileDescription = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    FileExtension = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
+                    FileSizeInBytes = table.Column<long>(type: "INTEGER", nullable: false),
+                    FilePath = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    CreatedAtUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    LastModifiedAtUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Regions",
                 columns: table => new
                 {
@@ -92,6 +112,9 @@ namespace Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Images");
+
             migrationBuilder.DropTable(
                 name: "Walks");
 
