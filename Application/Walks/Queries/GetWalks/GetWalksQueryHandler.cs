@@ -1,14 +1,16 @@
 using Application.Common.Interfaces;
-using Domain.Walks;
+using Application.Walks.Dtos;
+using Application.Walks.Mappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Walks.Queries.GetWalks;
 
-public sealed class GetWalksQueryHandler(IAppDbContext context) : IRequestHandler<GetWalksQuery, List<Walk>>
+public sealed class GetWalksQueryHandler(IAppDbContext context) : IRequestHandler<GetWalksQuery, List<WalkDto>>
 {
-    public async Task<List<Walk>> Handle(GetWalksQuery request, CancellationToken cancellationToken)
+    public async Task<List<WalkDto>> Handle(GetWalksQuery request, CancellationToken cancellationToken)
     {
-        return await context.Walks.Include(w => w.Difficulty).Include(w => w.Region).ToListAsync(cancellationToken);
+        var walks = await context.Walks.Include(w => w.Difficulty).Include(w => w.Region).ToListAsync(cancellationToken);
+        return walks.ToDtos();
     }
 }

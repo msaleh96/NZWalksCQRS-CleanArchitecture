@@ -35,7 +35,7 @@ public class WalksController(IMediator mediator) : ControllerBase
 
         var id = await mediator.Send(command);
 
-        return CreatedAtRoute("GetWalkById", new { id }, null);
+        return CreatedAtRoute("GetWalkById", new { id }, new { id });
     }
 
     [HttpPut("{id}")]

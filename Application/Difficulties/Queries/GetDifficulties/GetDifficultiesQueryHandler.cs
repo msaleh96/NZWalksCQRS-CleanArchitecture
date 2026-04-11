@@ -1,14 +1,16 @@
 using Application.Common.Interfaces;
-using Domain.Difficulties;
+using Application.Difficulties.Dtos;
+using Application.Difficulties.Mappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Difficulties.Queries.GetDifficulties;
 
-public sealed class GetDifficultiesQueryHandler(IAppDbContext context) : IRequestHandler<GetDifficultiesQuery, List<Difficulty>>
+public sealed class GetDifficultiesQueryHandler(IAppDbContext context) : IRequestHandler<GetDifficultiesQuery, List<DifficultyDto>>
 {
-    public async Task<List<Difficulty>> Handle(GetDifficultiesQuery request, CancellationToken cancellationToken)
+    public async Task<List<DifficultyDto>> Handle(GetDifficultiesQuery request, CancellationToken cancellationToken)
     {
-        return await context.Difficulties.ToListAsync(cancellationToken);
+        var difficulties = await context.Difficulties.ToListAsync(cancellationToken);
+        return difficulties.ToDtos();
     }
 }
