@@ -18,7 +18,7 @@ public class CreateRegionCommandValidator : AbstractValidator<CreateRegionComman
             .MaximumLength(100)
             .WithMessage("Name must not exceed 100 characters.");
 
-        RuleFor(x => x.image)
+        RuleFor(x => x.imageUrl)
             .MaximumLength(200)
             .WithMessage("Image URL must not exceed 200 characters.");
             

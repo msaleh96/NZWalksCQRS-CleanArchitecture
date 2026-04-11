@@ -1,11 +1,11 @@
+using Domain.Common;
 using Domain.Difficulties;
 using Domain.Regions;
 
 namespace Domain.Walks;
 
-public class Walk
+public class Walk : AuditableEntity
 {
-    public Guid Id { get; private set; }
     public string Name { get; private set; } = default!;
     public string Description { get; private set; } = default!;
     public double LengthInKm { get; private set; } = default!;
@@ -17,7 +17,9 @@ public class Walk
     public Difficulty Difficulty { get; private set; } = default!;
     public Region Region { get; private set; } = default!;
 
-    public Walk(
+    private Walk() { }
+
+    private Walk(
         string name,
         string description,
         double lengthInKm,
@@ -35,7 +37,33 @@ public class Walk
         WalkImageUrl = imageUrl;
     }
 
-    private Walk() { }
+
+    public static Walk Create(        
+        string name,
+        string description,
+        double lengthInKm,
+        Guid difficultyId,
+        Guid regionId,
+        string? imageUrl = null)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Walk name is required.");
+
+        if (string.IsNullOrWhiteSpace(description))
+            throw new ArgumentException("Description is required.");
+
+        if (lengthInKm <= 0)
+            throw new ArgumentException("Length must be greater than zero.");
+
+        if (difficultyId == Guid.Empty)
+            throw new ArgumentException("Invalid difficulty.");
+
+        if (regionId == Guid.Empty)
+            throw new ArgumentException("Invalid region.");
+
+        return new Walk(name, description, lengthInKm, difficultyId, regionId, imageUrl);
+    }
+
 
     public void SetName(string name)
     {

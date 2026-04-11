@@ -10,7 +10,7 @@ public sealed class CreateDifficultyCommandHandler(IAppDbContext context): IRequ
 
     public async Task<Guid> Handle(CreateDifficultyCommand request, CancellationToken cancellationToken)
     {
-        var difficulty = new Difficulty(request.Name);
+        var difficulty = Difficulty.Create(request.Name);
 
         context.Difficulties.Add(difficulty);
         await context.SaveChangesAsync(cancellationToken);

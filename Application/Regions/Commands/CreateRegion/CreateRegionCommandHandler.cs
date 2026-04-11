@@ -10,7 +10,7 @@ public sealed class CreateRegionCommandHandler(IAppDbContext context): IRequestH
 
     public async Task<Guid> Handle(CreateRegionCommand request, CancellationToken cancellationToken)
     {
-        var region = new Region(request.Code, request.Name, request.image);
+        var region = Region.Create(request.Code, request.Name, request.imageUrl);
 
         context.Regions.Add(region);
         await context.SaveChangesAsync(cancellationToken);

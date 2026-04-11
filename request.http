@@ -1,5 +1,5 @@
 @baseUrl = https://localhost:7081
-@difficultyId = a24590a0-d9a8-4b52-b99f-ac2d0303a278
+@difficultyId = cdf9e2c6-a367-40ba-a1a4-314f25f50787
 
 ### get all difficulties
 GET {{baseUrl}}/api/difficulties
@@ -30,7 +30,7 @@ DELETE {{baseUrl}}/api/difficulties/{{difficultyId}}
 
 ////////////////////////////////////////////////////
 
-@regionId = 37e7d152-7478-40e4-af9f-6021b191475f
+@regionId = ee3e235e-def6-4925-9438-0f3211da6fa6
 
 ### get all regions
 GET {{baseUrl}}/api/regions
@@ -64,7 +64,7 @@ DELETE {{baseUrl}}/api/regions/{{regionId}}
 
 ////////////////////////////////////////////////////
 
-@walkId = ed102308-dc2b-451b-8411-fa708a037711
+@walkId = fd2e69d2-44f8-43ff-9516-e6335560b331
 
 ### get all Walks
 GET {{baseUrl}}/api/walks

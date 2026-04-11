@@ -1,4 +1,5 @@
 using Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Domain.Walks;
 using MediatR;
 
@@ -8,6 +9,10 @@ public sealed class GetWalkByIdQueryHandler(IAppDbContext context) : IRequestHan
 {
     public async Task<Walk?> Handle(GetWalkByIdQuery request, CancellationToken cancellationToken)
     {
-        return await context.Walks.FindAsync([request.Id], cancellationToken);
+        return await context.Walks
+            .Include(w => w.Difficulty)
+            .Include(w => w.Region)
+            .FirstOrDefaultAsync(w => w.Id == request.Id, cancellationToken);
     }
 }
+    

@@ -10,7 +10,7 @@ public sealed class CreateWalkCommandHandler(IAppDbContext context): IRequestHan
 
     public async Task<Guid> Handle(CreateWalkCommand request, CancellationToken cancellationToken)
     {
-        var walk = new Walk(request.Name, request.Description, request.LengthInKm, request.DifficultyId, request.RegionId, request.ImageUrl);
+        var walk = Walk.Create(request.Name, request.Description, request.LengthInKm, request.DifficultyId, request.RegionId, request.ImageUrl);
 
         context.Walks.Add(walk);
         await context.SaveChangesAsync(cancellationToken);

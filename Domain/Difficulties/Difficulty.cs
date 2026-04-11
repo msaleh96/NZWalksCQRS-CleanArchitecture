@@ -1,16 +1,25 @@
+using Domain.Common;
+
 namespace Domain.Difficulties;
 
-public class Difficulty
+public class Difficulty : AuditableEntity
 {
-    public Guid Id { get; private set; }
     public string Name { get; private set; } = default!;
 
-    public Difficulty(string name)
+    private Difficulty() { }
+
+    private Difficulty(string name)
     {
-        SetName(name);
+        Name = name;
     }
 
-    private Difficulty() { }
+    public static Difficulty Create(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Difficulty name cannot be empty.");
+
+        return new Difficulty(name);
+    }
 
     public void SetName(string name)
     {
