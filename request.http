@@ -1,0 +1,103 @@
+@baseUrl = https://localhost:7081
+@difficultyId = a24590a0-d9a8-4b52-b99f-ac2d0303a278
+
+### get all difficulties
+GET {{baseUrl}}/api/difficulties
+
+
+### get difficulty by id
+GET {{baseUrl}}/api/difficulties/{{difficultyId}}
+
+### create new difficulty
+POST {{baseUrl}}/api/difficulties
+Content-Type: application/json
+
+{
+  "Name": "New Difficulty"
+}
+
+### update difficulty
+PUT {{baseUrl}}/api/difficulties/{{difficultyId}}
+Content-Type: application/json
+
+{
+  "Name": "Updated Difficulty"
+}
+
+### delete difficulty
+DELETE {{baseUrl}}/api/difficulties/{{difficultyId}}
+
+
+////////////////////////////////////////////////////
+
+@regionId = 37e7d152-7478-40e4-af9f-6021b191475f
+
+### get all regions
+GET {{baseUrl}}/api/regions
+
+
+### get region by id
+GET {{baseUrl}}/api/regions/{{regionId}}
+
+### create new region
+POST {{baseUrl}}/api/regions
+Content-Type: application/json
+
+{
+  "Name": "New Region",
+  "Code": "NEW-REGION"
+}
+
+### update region
+PUT {{baseUrl}}/api/regions/{{regionId}}
+Content-Type: application/json
+
+{
+  "Name": "Updated Region",
+  "Code": "UPDATED-REGION",
+  "imageUrl": "https://example.com/updated-region-image.jpg"
+}
+
+### delete region
+DELETE {{baseUrl}}/api/regions/{{regionId}}
+
+
+////////////////////////////////////////////////////
+
+@walkId = ed102308-dc2b-451b-8411-fa708a037711
+
+### get all Walks
+GET {{baseUrl}}/api/walks
+
+
+### get Walk by id
+GET {{baseUrl}}/api/walks/{{walkId}}
+
+### create new Walk
+POST {{baseUrl}}/api/walks
+Content-Type: application/json
+
+{
+  "Name": "New Walk",
+  "Description": "A new walk",
+  "LengthInKm": 5.0,
+  "DifficultyId": "{{difficultyId}}",
+  "RegionId": "{{regionId}}",
+  "imageUrl": "https://example.com/new-walk-image.jpg"
+}
+
+### update Walk
+PUT {{baseUrl}}/api/walks/{{walkId}}
+Content-Type: application/json
+
+{
+  "Name": "Updated Walk",
+  "Description": "An updated walk",
+  "LengthInKm": 6.0,
+  "DifficultyId": "{{difficultyId}}",
+  "RegionId": "{{regionId}}",
+  "imageUrl": "https://example.com/updated-walk-image.jpg"
+}
+
+### delete Walk
+DELETE {{baseUrl}}/api/walks/{{walkId}}
