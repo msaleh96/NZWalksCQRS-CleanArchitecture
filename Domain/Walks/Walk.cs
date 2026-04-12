@@ -1,4 +1,5 @@
 using Domain.Common;
+using Domain.Common.Results;
 using Domain.Difficulties;
 using Domain.Regions;
 
@@ -38,7 +39,7 @@ public class Walk : AuditableEntity
     }
 
 
-    public static Walk Create(        
+    public static Result<Walk> Create(        
         string name,
         string description,
         double lengthInKm,
@@ -47,19 +48,19 @@ public class Walk : AuditableEntity
         string? imageUrl = null)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Walk name is required.");
+            return WalkErrors.WalkNameIsRequired;
 
         if (string.IsNullOrWhiteSpace(description))
-            throw new ArgumentException("Description is required.");
+            return WalkErrors.WalkDescriptionIsRequired;
 
         if (lengthInKm <= 0)
-            throw new ArgumentException("Length must be greater than zero.");
+            return WalkErrors.WalkLengthMustBePositive;
 
         if (difficultyId == Guid.Empty)
-            throw new ArgumentException("Invalid difficulty.");
+            return WalkErrors.WalkDifficultyIsRequired;
 
         if (regionId == Guid.Empty)
-            throw new ArgumentException("Invalid region.");
+            return WalkErrors.WalkRegionIsRequired;
 
         return new Walk(name, description, lengthInKm, difficultyId, regionId, imageUrl);
     }

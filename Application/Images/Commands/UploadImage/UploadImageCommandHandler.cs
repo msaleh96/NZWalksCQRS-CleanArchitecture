@@ -1,6 +1,7 @@
 using Application.Common.Interfaces;
 using Application.Images.Dtos;
 using Application.Images.Mappers;
+using Domain.Common.Results;
 using Domain.Image;
 using MediatR;
 
@@ -9,9 +10,9 @@ namespace Application.Images.Commands.UploadImage;
 public sealed class UploadImageCommandHandler(
     IAppDbContext context,
     IFileStorageService fileStorageService)
-    : IRequestHandler<UploadImageCommand, ImageDto>
+    : IRequestHandler<UploadImageCommand, Result<ImageDto>>
 {
-    public async Task<ImageDto> Handle(UploadImageCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ImageDto>> Handle(UploadImageCommand request, CancellationToken cancellationToken)
     {
         var extension = Path.GetExtension(request.FileName);
 

@@ -1,24 +1,29 @@
 
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Difficulties.Dtos;
+using Application.Difficulties.Mappers;
+using Domain.Common.Results;
 using Domain.Difficulties;
 using MediatR;
 
 namespace Application.Difficulties.Commands.UpdateDifficulty;
 
-public sealed class UpdateDifficultyCommandHandler(IAppDbContext context): IRequestHandler<UpdateDifficultyCommand>
+public sealed class UpdateDifficultyCommandHandler(IAppDbContext context): IRequestHandler<UpdateDifficultyCommand, Result<DifficultyDto>>
 {
-
-    public async Task Handle(UpdateDifficultyCommand request, CancellationToken cancellationToken)
+    private readonly IAppDbContext _context = context;
+    public async Task<Result<DifficultyDto>> Handle(UpdateDifficultyCommand request, CancellationToken cancellationToken)
     {
 
-        var difficulty = await context.Difficulties.FindAsync([request.Id], cancellationToken);
+        var difficulty = await _context.Difficulties.FindAsync([request.Id], cancellationToken);
         
         if (difficulty is null)
-            throw new NotFoundException(nameof(Difficulty), request.Id);
+            return DifficultyErrors.DifficultyNotFound;
 
         difficulty.SetName(request.Name);
 
-        await context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return difficulty.ToDto();
+
     }
 }

@@ -1,26 +1,32 @@
 
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Regions.Dtos;
+using Application.Regions.Mappers;
+using Domain.Common.Results;
 using Domain.Regions;
 using MediatR;
 
 namespace Application.Regions.Commands.UpdateRegion;
 
-public sealed class UpdateRegionCommandHandler(IAppDbContext context): IRequestHandler<UpdateRegionCommand>
+public sealed class UpdateRegionCommandHandler(IAppDbContext context): IRequestHandler<UpdateRegionCommand, Result<RegionDto>>
 {
+    private readonly IAppDbContext _context = context;
 
-    public async Task Handle(UpdateRegionCommand request, CancellationToken cancellationToken)
+    public async Task<Result<RegionDto>> Handle(UpdateRegionCommand request, CancellationToken cancellationToken)
     {
 
-        var region = await context.Regions.FindAsync([request.Id], cancellationToken);
+        var region = await _context.Regions.FindAsync([request.Id], cancellationToken);
         
         if (region is null)
-            throw new NotFoundException(nameof(Region), request.Id);
+            return RegionErrors.RegionNotFound;
 
         region.SetCode(request.Code);
         region.SetName(request.Name);
         region.SetImage(request.image);
 
-        await context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return region.ToDto();
     }
 }

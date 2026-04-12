@@ -1,4 +1,5 @@
 using Domain.Common;
+using Domain.Common.Results;
 
 namespace Domain.Difficulties;
 
@@ -13,10 +14,10 @@ public class Difficulty : AuditableEntity
         Name = name;
     }
 
-    public static Difficulty Create(string name)
+    public static Result<Difficulty> Create(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Difficulty name cannot be empty.");
+            return DifficultyErrors.DifficultyNameIsRequired;
 
         return new Difficulty(name);
     }

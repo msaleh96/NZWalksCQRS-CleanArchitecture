@@ -1,3 +1,5 @@
+using Application.Walks.Dtos;
+using Domain.Common.Results;
 using MediatR;
 
 namespace Application.Walks.Commands.CreateWalk;
@@ -8,4 +10,4 @@ public sealed record CreateWalkCommand(
     double LengthInKm,
     Guid DifficultyId,
     Guid RegionId,
-    string? ImageUrl) : IRequest<Guid>;
+    string? ImageUrl) : IRequest<Result<WalkDto>>;

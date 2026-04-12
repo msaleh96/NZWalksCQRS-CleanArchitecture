@@ -6,6 +6,7 @@ using Application.Walks.Queries.GetWalks;
 using Application.Walks.Queries.GetWalkById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using API.Common;
 
 namespace API.Controllers;
 
@@ -14,18 +15,21 @@ namespace API.Controllers;
 public class WalksController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        var result = await mediator.Send(new GetWalksQuery());
-        return Ok(result);
+        var result = await mediator.Send(new GetWalksQuery(pageNumber, pageSize));
+
+        return result.ToApiResponse();
     }
 
     [HttpGet("{id}", Name = "GetWalkById")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var Walk = await mediator.Send(new GetWalkByIdQuery(id));
+        var result = await mediator.Send(new GetWalkByIdQuery(id));
 
-        return Walk is null ? NotFound() : Ok(Walk);
+        return result.ToApiResponse();
     }
 
     [HttpPost]
@@ -33,9 +37,12 @@ public class WalksController(IMediator mediator) : ControllerBase
     {
         var command = new CreateWalkCommand(request.Name, request.Description, request.LengthInKm, request.DifficultyId, request.RegionId, request.imageUrl);
 
-        var id = await mediator.Send(command);
+        var result = await mediator.Send(command);
 
-        return CreatedAtRoute("GetWalkById", new { id }, new { id });
+        return result.ToCreatedResponse(
+            "GetWalkById",
+            x => new { id = x.Id }
+        );
     }
 
     [HttpPut("{id}")]
@@ -43,15 +50,15 @@ public class WalksController(IMediator mediator) : ControllerBase
     {        
         var command = new UpdateWalkCommand(id, request.Name, request.Description, request.LengthInKm, request.DifficultyId, request.RegionId, request.imageUrl); 
 
-        await mediator.Send(command);
-        return NoContent();
+        var result = await mediator.Send(command);
+        return result.ToApiResponse();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await mediator.Send(new DeleteWalkCommand(id));
-        return NoContent();
+        var result = await mediator.Send(new DeleteWalkCommand(id));
+        return result.ToApiResponse();
     }
 
 }

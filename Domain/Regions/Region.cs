@@ -1,4 +1,5 @@
 using Domain.Common;
+using Domain.Common.Results;
 
 namespace Domain.Regions;
 
@@ -17,13 +18,13 @@ public class Region : AuditableEntity
         SetImage(imageUrl);
     }
 
-    public static Region Create(string code, string name, string? imageUrl = null)
+    public static Result<Region> Create(string code, string name, string? imageUrl = null)
     {
         if (string.IsNullOrWhiteSpace(code))
-            throw new ArgumentException("Region code is required.");
+            return RegionErrors.RegionCodeIsRequired;
 
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Region name is required.");
+            return RegionErrors.RegionNameIsRequired;
 
         return new Region(code, name, imageUrl);
     }

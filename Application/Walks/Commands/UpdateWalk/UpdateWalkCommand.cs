@@ -1,3 +1,5 @@
+using Application.Walks.Dtos;
+using Domain.Common.Results;
 using MediatR;
 
 namespace Application.Walks.Commands.UpdateWalk;
@@ -9,4 +11,4 @@ public sealed record UpdateWalkCommand(
     double LengthInKm,
     Guid DifficultyId,
     Guid RegionId,
-    string? ImageUrl) : IRequest;
+    string? ImageUrl) : IRequest<Result<WalkDto>> ;

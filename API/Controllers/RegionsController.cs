@@ -6,6 +6,7 @@ using Application.Regions.Queries.GetRegions;
 using Application.Regions.Queries.GetRegionById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using API.Common;
 
 namespace API.Controllers;
 
@@ -17,15 +18,15 @@ public class RegionsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Get()
     {
         var result = await mediator.Send(new GetRegionsQuery());
-        return Ok(result);
+        return result.ToApiResponse();
     }
 
     [HttpGet("{id}", Name = "GetRegionById")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var Region = await mediator.Send(new GetRegionByIdQuery(id));
+        var region = await mediator.Send(new GetRegionByIdQuery(id));
 
-        return Region is null ? NotFound() : Ok(Region);
+        return region.ToApiResponse();
     }
 
     [HttpPost]
@@ -33,9 +34,12 @@ public class RegionsController(IMediator mediator) : ControllerBase
     {
         var command = new CreateRegionCommand(request.Code, request.Name, request.imageUrl);
 
-        var id = await mediator.Send(command);
+        var result = await mediator.Send(command);
 
-        return CreatedAtRoute("GetRegionById", new { id }, null);
+        return result.ToCreatedResponse(
+            "GetRegionById",
+            x => new { id = x.Id }
+        );
     }
 
     [HttpPut("{id}")]
@@ -43,15 +47,15 @@ public class RegionsController(IMediator mediator) : ControllerBase
     {        
         var command = new UpdateRegionCommand(id, request.Code, request.Name, request.imageUrl); 
 
-        await mediator.Send(command);
-        return NoContent();
+        var result = await mediator.Send(command);
+        return result.ToApiResponse();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await mediator.Send(new DeleteRegionCommand(id));
-        return NoContent();
+        var result = await mediator.Send(new DeleteRegionCommand(id));
+        return result.ToApiResponse();
     }
 
 }

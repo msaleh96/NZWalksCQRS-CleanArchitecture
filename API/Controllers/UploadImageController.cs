@@ -1,3 +1,4 @@
+using API.Common;
 using Application.Images.Commands.UploadImage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,6 @@ public class UploadImageController(IMediator mediator) : ControllerBase
 
         var result = await mediator.Send(command);
 
-        return Ok(result);
+        return result.ToApiResponse();
     }
 }

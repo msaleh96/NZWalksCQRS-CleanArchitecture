@@ -13,6 +13,7 @@ public static class RegionMapper
         {
             Id = entity.Id,
             Name = entity.Name,
+            Code = entity.Code,
             ImageUrl = entity.RegionImageUrl
         };
     }
