@@ -12,24 +12,20 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class WalksController(IMediator mediator) : ControllerBase
+public class WalksController(IMediator mediator) : BaseController(mediator)
 {
     [HttpGet]
     public async Task<IActionResult> Get(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await mediator.Send(new GetWalksQuery(pageNumber, pageSize));
-
-        return result.ToApiResponse();
+        return await Send(new GetWalksQuery(pageNumber, pageSize));
     }
 
     [HttpGet("{id}", Name = "GetWalkById")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var result = await mediator.Send(new GetWalkByIdQuery(id));
-
-        return result.ToApiResponse();
+        return await Send(new GetWalkByIdQuery(id));
     }
 
     [HttpPost]
@@ -37,9 +33,8 @@ public class WalksController(IMediator mediator) : ControllerBase
     {
         var command = new CreateWalkCommand(request.Name, request.Description, request.LengthInKm, request.DifficultyId, request.RegionId, request.imageUrl);
 
-        var result = await mediator.Send(command);
-
-        return result.ToCreatedResponse(
+        return await SendCreate(
+            command,
             "GetWalkById",
             x => new { id = x.Id }
         );
@@ -50,15 +45,13 @@ public class WalksController(IMediator mediator) : ControllerBase
     {        
         var command = new UpdateWalkCommand(id, request.Name, request.Description, request.LengthInKm, request.DifficultyId, request.RegionId, request.imageUrl); 
 
-        var result = await mediator.Send(command);
-        return result.ToApiResponse();
+        return await Send(command);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await mediator.Send(new DeleteWalkCommand(id));
-        return result.ToApiResponse();
+        return await Send(new DeleteWalkCommand(id));
     }
 
 }

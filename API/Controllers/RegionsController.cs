@@ -12,21 +12,18 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RegionsController(IMediator mediator) : ControllerBase
+public class RegionsController(IMediator mediator) : BaseController(mediator)
 {
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var result = await mediator.Send(new GetRegionsQuery());
-        return result.ToApiResponse();
+        return await Send(new GetRegionsQuery());
     }
 
     [HttpGet("{id}", Name = "GetRegionById")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var region = await mediator.Send(new GetRegionByIdQuery(id));
-
-        return region.ToApiResponse();
+        return await Send(new GetRegionByIdQuery(id));
     }
 
     [HttpPost]
@@ -34,9 +31,8 @@ public class RegionsController(IMediator mediator) : ControllerBase
     {
         var command = new CreateRegionCommand(request.Code, request.Name, request.imageUrl);
 
-        var result = await mediator.Send(command);
-
-        return result.ToCreatedResponse(
+        return await SendCreate(
+            command,
             "GetRegionById",
             x => new { id = x.Id }
         );
@@ -47,15 +43,13 @@ public class RegionsController(IMediator mediator) : ControllerBase
     {        
         var command = new UpdateRegionCommand(id, request.Code, request.Name, request.imageUrl); 
 
-        var result = await mediator.Send(command);
-        return result.ToApiResponse();
+        return await Send(command);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await mediator.Send(new DeleteRegionCommand(id));
-        return result.ToApiResponse();
+        return await Send(new DeleteRegionCommand(id));
     }
 
 }

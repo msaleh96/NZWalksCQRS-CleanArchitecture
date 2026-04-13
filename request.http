@@ -1,5 +1,5 @@
 @baseUrl = https://localhost:7081
-@difficultyId = 8c936d6d-1060-4efb-9480-7ac8abd7d275
+@difficultyId = bfbd8898-531b-433c-8589-da5e1c02f0ba
 
 ### get all difficulties
 GET {{baseUrl}}/api/difficulties
@@ -13,7 +13,7 @@ POST {{baseUrl}}/api/difficulties
 Content-Type: application/json
 
 {
-  "Name": "New Difficult2y2222222"
+  "Name": "New Difficult2y332222222"
 }
 
 ### update difficulty
@@ -30,7 +30,7 @@ DELETE {{baseUrl}}/api/difficulties/{{difficultyId}}
 
 ////////////////////////////////////////////////////
 
-@regionId = 2fd0fc1b-3064-44ba-a121-ed1bddabf7df
+@regionId = 2fd0fc1b-3064-44ba-a121-ed5bddabf7df
 
 ### get all regions
 GET {{baseUrl}}/api/regions
@@ -64,10 +64,13 @@ DELETE {{baseUrl}}/api/regions/{{regionId}}
 
 ////////////////////////////////////////////////////
 
-@walkId = eb4ae35d-7282-4497-a772-4fa2bb26b0da
+@walkId = c3a7f22f-405d-4db9-8101-3271e6c0ca69
 
 ### get all Walks
-GET {{baseUrl}}/api/walks?pageNumber=1&pageSize=2
+@pageNumber = 1
+@pageSize = 2
+
+GET {{baseUrl}}/api/walks?pageNumber={{pageNumber}}&pageSize={{pageSize}}
 
 
 ### get Walk by id

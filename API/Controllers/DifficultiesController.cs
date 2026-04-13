@@ -12,31 +12,25 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DifficultiesController(IMediator mediator) : ControllerBase
+public class DifficultiesController(IMediator mediator) : BaseController(mediator)
 {
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var result = await mediator.Send(new GetDifficultiesQuery());
-        return result.ToApiResponse();
+        return await Send(new GetDifficultiesQuery());
     }
 
     [HttpGet("{id}", Name = "GetDifficultyById")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var difficulty = await mediator.Send(new GetDifficultyByIdQuery(id));
-
-        return difficulty.ToApiResponse();
+        return await Send(new GetDifficultyByIdQuery(id));
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(CreateDifficultyRequest request)
     {
-        var command = new CreateDifficultyCommand(request.Name);
-
-        var result = await mediator.Send(command);
-
-        return result.ToCreatedResponse(
+        return await SendCreate(
+            new CreateDifficultyCommand(request.Name),
             "GetDifficultyById",
             x => new { id = x.Id }
         );
@@ -44,18 +38,14 @@ public class DifficultiesController(IMediator mediator) : ControllerBase
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(Guid id, UpdateDifficultyRequest request)
-    {        
-        var command = new UpdateDifficultyCommand(id, request.Name); 
-
-        var result = await mediator.Send(command);
-        return result.ToApiResponse();
+    {
+        return await Send(new UpdateDifficultyCommand(id, request.Name));
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await mediator.Send(new DeleteDifficultyCommand(id));
-        return result.ToApiResponse();
+        return await Send(new DeleteDifficultyCommand(id));
     }
 
 }
