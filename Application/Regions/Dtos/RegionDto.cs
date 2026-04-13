@@ -1,6 +1,8 @@
+using Application.Common.Interfaces;
+
 namespace Application.Regions.Dtos;
 
-public class RegionDto
+public class RegionDto : IHasId
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

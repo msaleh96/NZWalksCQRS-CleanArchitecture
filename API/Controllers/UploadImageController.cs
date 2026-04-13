@@ -7,7 +7,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UploadImageController(IMediator mediator) : BaseController(mediator)
+public class UploadImageController(IMediator mediator)
 {
     [HttpPost("upload")]
     public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromForm] string description)
@@ -18,6 +18,8 @@ public class UploadImageController(IMediator mediator) : BaseController(mediator
             file.FileName,
             description);
 
-        return await Send(command);
+        var result = await mediator.Send(command);
+
+        return result.ToApiResponse();
     }
 }

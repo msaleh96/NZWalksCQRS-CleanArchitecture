@@ -1,11 +1,10 @@
+using Application.Common.Interfaces;
 using Application.Difficulties.Dtos;
 using Application.Regions.Dtos;
-using Domain.Difficulties;
-using Domain.Regions;
 
 namespace Application.Walks.Dtos;
 
-public class WalkDto
+public class WalkDto : IHasId
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
