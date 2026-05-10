@@ -1,36 +1,29 @@
-using API.Exceptions;
-using Application.Behaviors;
-using Application.Common.Interfaces;
-using FluentValidation;
-using Infrastructure.Data;
-using Infrastructure.Services;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using API;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddProblemDetails();
-
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-
-builder.Services.AddControllers();
-
-builder.Services.AddMediatR(Options => Options.RegisterServicesFromAssembly(typeof(Application.IAssemblyMarker).Assembly));
-
-builder.Services.AddValidatorsFromAssembly(typeof(Application.IAssemblyMarker).Assembly);
-
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=app.db"));
-
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
-builder.Services.AddScoped<IAppDbContext, AppDbContext>();
-
-builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
 app.UseExceptionHandler();
 
 app.MapControllers();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "Project API");
+        options.EnableDeepLinking();
+        options.DisplayRequestDuration();
+        options.EnableFilter();
+    });
+
+    app.MapScalarApiReference();
+}
 
 app.Run();

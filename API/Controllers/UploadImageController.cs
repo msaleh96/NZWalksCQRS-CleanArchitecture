@@ -1,4 +1,5 @@
 using API.Common;
+using API.Requests.UploadImage;
 using Application.Images.Commands.UploadImage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -7,16 +8,17 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UploadImageController(IMediator mediator)
+public class UploadImageController(IMediator mediator) : ControllerBase
 {
     [HttpPost("upload")]
-    public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromForm] string description)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Upload([FromForm] UploadImageRequest request)
     {
 
         var command = new UploadImageCommand(
-            file.OpenReadStream(),
-            file.FileName,
-            description);
+            request.File.OpenReadStream(),
+            request.File.FileName,
+            request.Description);
 
         var result = await mediator.Send(command);
 
