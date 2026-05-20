@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using API.Exceptions;
-using Application.Behaviors;
+using Application.Common.Behaviors;
 using Application.Common.Interfaces;
 using FluentValidation;
 using Infrastructure.Data;
@@ -15,21 +15,21 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddProblemDetails()
+        services.AddCustomProblemDetails()
                 .AddApiDocumentation()
                 .AddExceptionHandling()
                 .AddControllerWithJsonConfiguration()
-                .AddMediator()
+                .AddMediatR()
                 .AddValidatorsFromAssembly()
-                .AddDatabase(configuration)
                 .AddValidationBehavior()
+                .AddDatabase(configuration)
                 .AddAppDbContext()
                 .AddLocalFileStorageService();
 
         return services;
     }
 
-    public static IServiceCollection AddProblemDetails(this IServiceCollection services)
+    public static IServiceCollection AddCustomProblemDetails(this IServiceCollection services)
     {
         services.AddProblemDetails();
         return services;
@@ -58,7 +58,7 @@ public static class DependencyInjection
     }
 
     
-    public static IServiceCollection AddMediator(this IServiceCollection services)
+    public static IServiceCollection AddMediatR(this IServiceCollection services)
     {
         services.AddMediatR(Options => Options.RegisterServicesFromAssembly(typeof(Application.IAssemblyMarker).Assembly));
         return services;
@@ -70,6 +70,11 @@ public static class DependencyInjection
         return services;
     }
 
+    public static IServiceCollection AddValidationBehavior(this IServiceCollection services)
+    {
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        return services;
+    }
 
     public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
@@ -79,11 +84,6 @@ public static class DependencyInjection
         return services;
     }
         
-    public static IServiceCollection AddValidationBehavior(this IServiceCollection services)
-    {
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        return services;
-    }
         
     public static IServiceCollection AddAppDbContext(this IServiceCollection services)
     {

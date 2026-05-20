@@ -1,5 +1,6 @@
 using Application.Common.Interfaces;
 using Domain.Common.Results;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,9 @@ public abstract class BaseController<
     TListResponse,
     TListQuery,
     TGetByIdQuery,
+    TCreateRequest,
     TCreateCommand,
+    TUpdateRequest,
     TUpdateCommand,
     TDeleteCommand
 > : ControllerBase
@@ -49,9 +52,11 @@ public abstract class BaseController<
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] TCreateCommand command)
+    public async Task<IActionResult> Post([FromBody] TCreateRequest request)
     {
-        var result = await _mediator.Send(command);
+        var command = request.Adapt<TCreateCommand>();
+
+        var result = await _mediator.Send(command!);
 
         if (result.IsError)
             return result.ToApiResponse();
@@ -64,14 +69,19 @@ public abstract class BaseController<
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] TUpdateCommand command)
+    public async Task<IActionResult> Update(
+        Guid id,
+        [FromBody] TUpdateRequest request)
     {
+        var command = request.Adapt<TUpdateCommand>();
+
         var prop = typeof(TUpdateCommand).GetProperty("Id");
 
         if (prop is not null)
             prop.SetValue(command, id);
 
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command!);
+
         return result.ToApiResponse();
     }
 

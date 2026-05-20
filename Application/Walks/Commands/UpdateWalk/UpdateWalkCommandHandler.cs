@@ -1,5 +1,4 @@
 
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Walks.Dtos;
 using Application.Walks.Mappers;

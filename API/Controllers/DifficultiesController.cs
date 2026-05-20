@@ -1,4 +1,5 @@
 using API.Common;
+using API.Difficulty.Requests;
 using Application.Difficulties.Commands.CreateDifficulty;
 using Application.Difficulties.Commands.DeleteDifficulty;
 using Application.Difficulties.Commands.UpdateDifficulty;
@@ -18,7 +19,9 @@ public class DifficultiesController(IMediator mediator)
         List<DifficultyDto>,
         GetDifficultiesQuery,
         GetDifficultyByIdQuery,
+        CreateDifficultyRequest,
         CreateDifficultyCommand,
+        UpdateDifficultyRequest,
         UpdateDifficultyCommand,
         DeleteDifficultyCommand
     >(mediator);

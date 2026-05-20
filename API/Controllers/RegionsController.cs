@@ -7,6 +7,7 @@ using Application.Regions.Queries.GetRegions;
 using Application.Regions.Queries.GetRegionById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using API.Region.Requests;
 
 namespace API.Controllers;
 
@@ -18,7 +19,9 @@ public class RegionsController(IMediator mediator)
         List<RegionDto>,
         GetRegionsQuery,
         GetRegionByIdQuery,
+        CreateRegionRequest,
         CreateRegionCommand,
+        UpdateRegionRequest,
         UpdateRegionCommand,
         DeleteRegionCommand
     >(mediator);

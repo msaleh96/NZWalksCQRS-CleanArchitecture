@@ -20,7 +20,9 @@ public class WalksController(IMediator mediator)
         PagedResult<WalkDto>,
         GetWalksQuery,
         GetWalkByIdQuery,
+        CreateWalkRequest,
         CreateWalkCommand,
+        UpdateWalkRequest,
         UpdateWalkCommand,
         DeleteWalkCommand
     >(mediator);

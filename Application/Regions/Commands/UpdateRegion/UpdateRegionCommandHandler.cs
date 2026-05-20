@@ -1,5 +1,4 @@
 
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Regions.Dtos;
 using Application.Regions.Mappers;
