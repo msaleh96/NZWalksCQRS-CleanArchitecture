@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationServices(builder.Configuration);
 
+builder.Services.AddHybridCache();
+
 var app = builder.Build();
 
 app.UseExceptionHandler();

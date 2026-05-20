@@ -1,6 +1,6 @@
 using API.Common;
 using API.Requests.UploadImage;
-using Application.Images.Commands.UploadImage;
+using Application.Features.Images.Commands.UploadImage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

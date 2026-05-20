@@ -21,7 +21,7 @@ public static class DependencyInjection
                 .AddControllerWithJsonConfiguration()
                 .AddMediatR()
                 .AddValidatorsFromAssembly()
-                .AddValidationBehavior()
+                .AddPipelineBehaviors()
                 .AddDatabase(configuration)
                 .AddAppDbContext()
                 .AddLocalFileStorageService();
@@ -70,9 +70,24 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddValidationBehavior(this IServiceCollection services)
+    // public static IServiceCollection AddValidationBehavior(this IServiceCollection services)
+    // {
+    //     services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+    //     return services;
+    // }
+
+    public static IServiceCollection AddPipelineBehaviors(this IServiceCollection services)
     {
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(
+            typeof(IPipelineBehavior<,>),
+            typeof(ValidationBehavior<,>)
+        );
+
+        services.AddTransient(
+            typeof(IPipelineBehavior<,>),
+            typeof(CachingBehavior<,>)
+        );
+
         return services;
     }
 

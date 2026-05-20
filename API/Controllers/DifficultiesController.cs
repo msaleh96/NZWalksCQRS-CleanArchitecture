@@ -1,11 +1,11 @@
 using API.Common;
 using API.Difficulty.Requests;
-using Application.Difficulties.Commands.CreateDifficulty;
-using Application.Difficulties.Commands.DeleteDifficulty;
-using Application.Difficulties.Commands.UpdateDifficulty;
-using Application.Difficulties.Dtos;
-using Application.Difficulties.Queries.GetDifficulties;
-using Application.Difficulties.Queries.GetDifficultyById;
+using Application.Features.Difficulties.Commands.CreateDifficulty;
+using Application.Features.Difficulties.Commands.DeleteDifficulty;
+using Application.Features.Difficulties.Commands.UpdateDifficulty;
+using Application.Features.Difficulties.Dtos;
+using Application.Features.Difficulties.Queries.GetDifficulties;
+using Application.Features.Difficulties.Queries.GetDifficultyById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

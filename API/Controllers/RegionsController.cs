@@ -1,10 +1,10 @@
 using API.Common;
-using Application.Regions.Commands.CreateRegion;
-using Application.Regions.Commands.DeleteRegion;
-using Application.Regions.Commands.UpdateRegion;
-using Application.Regions.Dtos;
-using Application.Regions.Queries.GetRegions;
-using Application.Regions.Queries.GetRegionById;
+using Application.Features.Regions.Commands.CreateRegion;
+using Application.Features.Regions.Commands.DeleteRegion;
+using Application.Features.Regions.Commands.UpdateRegion;
+using Application.Features.Regions.Dtos;
+using Application.Features.Regions.Queries.GetRegions;
+using Application.Features.Regions.Queries.GetRegionById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using API.Region.Requests;

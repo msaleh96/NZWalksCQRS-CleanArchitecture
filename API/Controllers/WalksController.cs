@@ -1,13 +1,13 @@
 using API.Walk.Requests;
-using Application.Walks.Commands.CreateWalk;
-using Application.Walks.Commands.DeleteWalk;
-using Application.Walks.Commands.UpdateWalk;
-using Application.Walks.Queries.GetWalks;
-using Application.Walks.Queries.GetWalkById;
+using Application.Features.Walks.Commands.CreateWalk;
+using Application.Features.Walks.Commands.DeleteWalk;
+using Application.Features.Walks.Commands.UpdateWalk;
+using Application.Features.Walks.Queries.GetWalks;
+using Application.Features.Walks.Queries.GetWalkById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using API.Common;
-using Application.Walks.Dtos;
+using Application.Features.Walks.Dtos;
 using Application.Common.Models;
 
 namespace API.Controllers;
