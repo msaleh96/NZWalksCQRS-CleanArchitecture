@@ -2,11 +2,14 @@ using System.Text.Json.Serialization;
 using API.Exceptions;
 using Application.Common.Behaviors;
 using Application.Common.Interfaces;
+using Application.Infrastructure.Identity;
 using FluentValidation;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 
 namespace API;
 
@@ -24,7 +27,9 @@ public static class DependencyInjection
                 .AddPipelineBehaviors()
                 .AddDatabase(configuration)
                 .AddAppDbContext()
-                .AddLocalFileStorageService();
+                .AddLocalFileStorageService()
+                .AddIdentityServices()
+                .AddTokenProvider();
 
         return services;
     }
@@ -37,7 +42,24 @@ public static class DependencyInjection
 
     public static IServiceCollection AddApiDocumentation(this IServiceCollection services)
     {
-        services.AddOpenApi();
+        services.AddOpenApi(options =>
+        {
+            options.AddDocumentTransformer((document, context, cancellationToken) =>
+            {
+                document.Components ??= new OpenApiComponents();
+                document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+                document.Components.SecuritySchemes["Bearer"] = new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter your JWT Bearer token."
+                };
+                return Task.CompletedTask;
+            });
+        });
+
         return services;
     }
 
@@ -70,12 +92,6 @@ public static class DependencyInjection
         return services;
     }
 
-    // public static IServiceCollection AddValidationBehavior(this IServiceCollection services)
-    // {
-    //     services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-    //     return services;
-    // }
-
     public static IServiceCollection AddPipelineBehaviors(this IServiceCollection services)
     {
         services.AddTransient(
@@ -96,6 +112,28 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("DefaultConnection") ?? "Data Source=app.db";
 
         services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+        return services;
+    }
+
+    public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+    {
+        services.AddDataProtection();
+
+        services.AddIdentityCore<AppUser>()
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.AddAuthorization();
+
+        services.AddScoped<IIdentityService, IdentityService>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddTokenProvider(this IServiceCollection services)
+    {
+        services.AddScoped<ITokenProvider, TokenProvider>();
         return services;
     }
         
